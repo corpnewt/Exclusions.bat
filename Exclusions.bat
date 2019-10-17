@@ -8,18 +8,15 @@ NET FILE 1>NUL 2>NUL
 if '%errorlevel%' == '0' ( goto gotPrivileges ) else ( goto getPrivileges )
 
 :getPrivileges
-setlocal DisableDelayedExpansion
-set "batchPath=%~0"
 setlocal EnableDelayedExpansion
-set "args=%*"
 :: Double up any quotes in args
-set batchPath=%~f0
-set batchPath=""%batchPath:"=%""
+set "batchPath=%~f0"
+set "batchPath=""%batchPath:"=%"""
+:: Walk the args, stripping them if they're empty or only quotes
+set "args=%*"
 if NOT "!args!"=="" (
-    REM Strip quotes to make sure it's not empty quotes
     set "argq=!args:"=""!"
     if NOT "!argq!" == "" (
-        REM Double up any quotes as we have a valid var
         set "args= !args:"=""!"
     )
 )
