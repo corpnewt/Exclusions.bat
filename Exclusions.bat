@@ -11,13 +11,28 @@ if '%errorlevel%' == '0' ( goto gotPrivileges ) else ( goto getPrivileges )
 setlocal DisableDelayedExpansion
 set "batchPath=%~0"
 setlocal EnableDelayedExpansion
+set "args=%*"
+:: Double up any quotes in args
+set batchPath=%~f0
+set batchPath=""%batchPath:"=%""
+if NOT "!args!"=="" (
+    REM Strip quotes to make sure it's not empty quotes
+    set "argq=!args:"=""!"
+    if NOT "!argq!" == "" (
+        REM Double up any quotes as we have a valid var
+        set "args= !args:"=""!"
+    )
+)
+pause
 ECHO Set UAC = CreateObject^("Shell.Application"^) > "%temp%\OEgetPrivileges.vbs"
-ECHO UAC.ShellExecute "!batchPath!", "%*", "", "runas", 1 >> "%temp%\OEgetPrivileges.vbs"
+ECHO UAC.ShellExecute "cmd", "/c ""!batchPath!!args!""", "", "runas", 1 >> "%temp%\OEgetPrivileges.vbs"
 "%temp%\OEgetPrivileges.vbs"
 exit /B
 
 :gotPrivileges
 :: set the current directory to the batch file location
+echo "%~1"
+pause
 cd /d %~dp0
 ::::::::::::::::::::::::::::
 ::START
