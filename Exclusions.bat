@@ -23,7 +23,6 @@ if NOT "!args!"=="" (
         set "args= !args:"=""!"
     )
 )
-pause
 ECHO Set UAC = CreateObject^("Shell.Application"^) > "%temp%\OEgetPrivileges.vbs"
 ECHO UAC.ShellExecute "cmd", "/c ""!batchPath!!args!""", "", "runas", 1 >> "%temp%\OEgetPrivileges.vbs"
 "%temp%\OEgetPrivileges.vbs"
@@ -31,8 +30,6 @@ exit /B
 
 :gotPrivileges
 :: set the current directory to the batch file location
-echo "%~1"
-pause
 cd /d %~dp0
 ::::::::::::::::::::::::::::
 ::START
